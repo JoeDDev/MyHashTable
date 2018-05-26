@@ -1,0 +1,241 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace hashtable
+{
+    
+     class HashTable
+     {
+        class Pila
+        {
+
+            
+            class Nodo
+            {
+                public String info;
+                public Nodo sig;
+            }
+
+            private Nodo raiz;
+
+            public Pila()
+            {
+                raiz = null;
+            }
+            public void Insertar(String x)
+            {
+                Nodo nuevo;
+                nuevo = new Nodo();
+                nuevo.info = x;
+                if (raiz == null)
+                {
+                    nuevo.sig = null;
+                    raiz = nuevo;
+                }
+                else
+                {
+                    nuevo.sig = raiz;
+                    raiz = nuevo;
+                }
+            }
+            
+            public String Imprimir()
+            {
+                Nodo reco = raiz;
+                String resultado = "";
+                
+                while (reco != null)
+                {
+                    resultado = reco.info + "-";
+                    reco = reco.sig;
+                } 
+                return resultado;
+            }
+
+            public String Retornar()
+            {
+                if (raiz != null)
+                {
+                    String informacion = raiz.info;
+                    return informacion;
+                }
+                else
+                {
+                    String nada = "La lista esta vacía";
+                    return nada;
+                }
+            }
+
+        }
+
+        public class Hash
+        {
+            
+            
+
+                 
+            //hashfunction is my hash function...
+            public int hashfunction(int total)
+                {
+                    int Total = total % 50;
+                    if (Total > 50)
+                    {
+                        int nocheinmal = Total % 50;
+                    
+                    
+                        if (nocheinmal > 50)
+                        {
+                            int nocheinmal2 = nocheinmal % 50;
+                            
+                            return nocheinmal2;
+                        }
+                        else
+                        {
+                            return nocheinmal;
+                        }
+                        
+                    }
+                    else
+                    {
+                        
+                        return Total;
+                    }
+                    
+                }
+                
+                public String conversion(String producto)
+                {
+                    String info = producto;
+                    int length = info.Length;
+                    var infoToChar = info.ToCharArray();
+                    String resultado = "";
+                    int total = 0;
+                    for(int x = 0; x <= length - 1; x++)
+                    {
+                        char celda =  infoToChar[x];
+                        int valorAscii = (int)celda;
+                        resultado = resultado + " - " + Convert.ToString(valorAscii);
+                        total = total + valorAscii;
+                    }
+                    
+                    int DBChar = hashfunction(total);
+                    
+                //we put de value to our table
+                    
+                    String DBString = Convert.ToString(DBChar);
+                    return DBString;
+                }
+        }
+        static void Main(string[] args)
+        {
+
+            //We start to initialize our Pila
+            Pila[] contenedor = new Pila[50];
+            for (int h = 0; h <= 49; h++)
+            {
+                contenedor[h] = new Pila();
+            }
+
+            int option = 0;
+            Hash producto = new Hash();
+            
+            while (option != 3)
+            {
+                Console.Clear();
+                Console.WriteLine("Ingreso de ID de productos");
+                Console.WriteLine();
+                Console.WriteLine("1. Registro de producto");
+                Console.WriteLine("2. Consulta de producto");
+
+
+                string s = Console.ReadLine();
+                bool evaluation = int.TryParse(s, out option);
+
+                if (evaluation == false)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Ingrese la opcion correcta...");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+                else
+                {
+                    switch (option)
+                    {
+                        case 1:
+
+                            
+                            Console.Clear();
+                            String resultado;
+                            Console.WriteLine("Ingrese el codigo del producto:");
+                            String info = Console.ReadLine();
+                            // “resultado" is our ASCII code
+                            //in our table.
+
+                            resultado = producto.conversion(info);
+                            int resultConvert = int.Parse(resultado);
+
+                            
+                            
+                            String a = contenedor[resultConvert - 1].Retornar();
+                            
+                            
+                            if (info == a)
+                            {
+                                Console.WriteLine("El producto ya existe.");
+                                Console.ReadKey();
+                            }
+                            else
+                            {
+                                contenedor[resultConvert-1].Insertar(info);
+                                
+                            }
+
+
+
+                            Console.ReadKey();
+                            break;
+                        case 2:
+                            Console.Clear();
+                            String resultadoconsulta;
+                            Console.WriteLine("Ingrese el codigo del producto que desea buscar:");
+                            String infoconsulta = Console.ReadLine();
+                            //“resultado" is our ASCII code
+                            //in our table.
+
+                            resultadoconsulta = producto.conversion(infoconsulta);
+                            int resultConvertconsulta = int.Parse(resultadoconsulta);
+
+                            String aconsulta = contenedor[resultConvertconsulta - 1].Retornar();
+
+                            if (infoconsulta == aconsulta)
+                            {
+                                Console.WriteLine("El producto SI existe.");
+                                Console.ReadKey();
+                            }
+                            else
+                            {
+                                Console.WriteLine("El producto NO existe.");
+                                Console.ReadKey();
+                            }
+                            
+                            break;
+                        case 3:
+                            Console.WriteLine("Salir del programa...");
+
+                            
+
+                            Console.ReadKey();
+                            break;
+                    }
+                }
+            }
+
+        }
+
+
+    }
+}
