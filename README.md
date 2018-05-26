@@ -1,2 +1,3 @@
 # MyHashTable
 Hashing...
+I made a program applying the use of hash functions in an array of [50]. In it you enter the code of a product and you can see if it exists or does not exist. There you can see which hash function I created using the ASCII code ... I await your constructive criticism.
